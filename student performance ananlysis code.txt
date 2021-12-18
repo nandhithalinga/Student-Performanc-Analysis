@@ -1,0 +1,2000 @@
+from tkinter import *
+from tkinter import ttk
+import matplotlib.pyplot as plt
+import tkinter.messagebox as MessageBox
+import mysql.connector as mysql
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from pandas import DataFrame
+from PIL import ImageTk
+from PIL import Image
+
+root=Tk()
+root.title('VVIT')
+root.geometry("1500x850")
+#============home background=======
+bg_icon=ImageTk.PhotoImage(file="D:\\Desktop\\images\\bgg4.jpg")
+bg_lbl=Label(root,image=bg_icon,width=2000,height=4000).pack(padx=0,pady=0)
+#=============home icons=============
+admin_icon=ImageTk.PhotoImage(file="C:\\Users\\admin\\Desktop\\images\\admin1.png")
+student_icon=ImageTk.PhotoImage(file="C:\\Users\\admin\\Desktop\\images\\student1.jpg")
+result_icon=ImageTk.PhotoImage(file="C:\\Users\\admin\\Desktop\\images\\result.jpg")
+#===============admin function=========
+def adminloginfunction():
+    #=======admin login function=======
+    def adminloginbuttonfunction():
+        if h3entry.get()==" " or h4entry.get()==" ":
+            MessageBox.showerror("Admin Login Status","All fields are required")
+        elif h3entry.get()=="admin" and h4entry.get()=="admin":
+            adminfunction()
+        else:
+            MessageBox.showerror("Admin Login Status","Invalid username or password") 
+
+    #===========admin function========
+    def adminfunction():
+        command=slw.destroy()
+        aw=Toplevel()
+        aw.geometry("1500x850")
+        aw.title('VVIT-Admin')
+
+    
+        #==========update function==========
+        def update():
+            rollnumber=rollnumenty.get()
+            first=firstnameenty.get()
+            last=lastnameenty.get()
+            gen=combo_gender.get()
+            br=combo_branch.get()
+            yearofstudy=combo_year.get()
+            mail=emailenty.get()
+            clang=centy.get()
+            pyt=pythonenty.get()
+            jaava=javaenty.get()
+            dss=dsenty.get()
+            if(len(rollnumber)!=10 or len(first)==0 or len(last)==0 or len(gen)==0 or len(br)==0 or len(yearofstudy)==0 or len(mail)!=19 or len(clang)==0 or len(pyt)==0 or len(jaava)==0 or len(dss)==0):
+                MessageBox.showerror("Submit Status","All fields are required with correct informatin")
+            else:
+                con=mysql.connect(host="localhost",user="root",password="nandhu118",database="project")
+                cursor=con.cursor()
+                cursor.execute("update student set FirstName=%s,LastName=%s,Gender=%s,Branch=%s,YearofStudy=%s,Email=%s,C=%s,Python=%s,Java=%s,DS=%s where RollNumber=%s",(first,last,gen,br,yearofstudy,mail,clang,pyt,jaava,dss,rollnumber))    
+                con.commit()
+                fetch_data()
+                clear()
+                con.close()
+
+        def deletee():
+                rollnumber=rollnumenty.get()
+                con=mysql.connect(host="localhost",user="root",password="nandhu118",database="project")
+                cursor=con.cursor()
+                query="delete from student where RollNumber='"+rollnumber+"'"
+                cursor.execute(query)    
+                con.commit()
+                fetch_data()
+                clear()
+                con.close()   
+        def clear():
+            rollnumenty.delete(0,'end')
+            firstnameenty.delete(0,'end')
+            lastnameenty.delete(0,'end')
+            combo_gender.set(" ")
+            combo_branch.set(" ")
+            combo_year.set(" ")
+            emailenty.delete(0,'end')
+            centy.delete(0,'end')
+            pythonenty.delete(0,'end')
+            javaenty.delete(0,'end')
+            dsenty.delete(0,'end')        
+        def search():
+            sb=combo_search.get()
+            s=txt_search.get()
+            con=mysql.connect(host="localhost",user="root",password="nandhu118",database="project")
+            cursor=con.cursor()
+            cursor.execute("select * from student where  RollNumber='"+s+"' or FirstName='"+s+"'")
+            rows=cursor.fetchall()
+            if len(rows)!=0:
+                student_table.delete(*student_table.get_children()) 
+                for row in rows:
+                    student_table.insert('',END,values=row)
+                con.commit()
+            
+            con.close()   
+        def showall():
+            con=mysql.connect(host="localhost",user="root",password="nandhu118",database="project")
+            cursor=con.cursor()
+            combo_search.set(" ")
+            txt_search.delete(0,'end')
+            cursor.execute("select * from student")
+            rows=cursor.fetchall()
+            if len(rows)!=0:
+                student_table.delete(*student_table.get_children()) 
+                for row in rows:
+                    student_table.insert('',END,values=row)
+                con.commit()
+            con.close()   
+        def fetch_data():
+            con=mysql.connect(host="localhost",user="root",password="nandhu118",database="project")
+            cursor=con.cursor()
+            cursor.execute("select * from student")
+            rows=cursor.fetchall()
+            if len(rows)!=0:
+                student_table.delete(*student_table.get_children()) 
+                for row in rows:
+                    student_table.insert('',END,values=row)
+                con.commit()
+            con.close()   
+        def get_data(ev):
+            cursor_row=student_table.focus()
+            content=student_table.item(cursor_row)
+            row=content['values']
+            rollnumenty.insert(END,row[0])
+            firstnameenty.insert(END,row[1])
+            lastnameenty.insert(END,row[2])
+            combo_gender.set(row[3])
+            combo_branch.set(row[4])
+            combo_year.set(row[5])
+            emailenty.insert(END,row[6])
+            centy.insert(END,row[7])
+            pythonenty.insert(END,row[8])
+            javaenty.insert(END,row[9])
+            dsenty.insert(END,row[10])
+
+
+
+        title1=Label(aw,text="Admin DashBoard",font=("times new roman",40,"italic"),bg="#192045",fg="#ffff12")
+        title1.place(x=0,y=0,relwidth=1)
+        exit1button=Button(title1,text="Logout",width=15,bd=5,command=aw.destroy).pack(side='right',padx=20,pady=20)
+
+        title2=Label(aw,text="Enter details of the student",font=("times new roman",20,"italic"),bg="#78ff78",fg="#742291")
+        title2.place(x=2,y=75)
+
+        rollnum=Label(aw,text="Roll Number",font=("times new roman",20,"bold"))
+        rollnum.place(x=20,y=120)
+        rollnumenty=Entry(aw,font=("times new roman",15,"bold"),bd=5,relief=GROOVE)
+        rollnumenty.place(x=200,y=120)
+
+        firstname=Label(aw,text="First Name",font=("times new roman",20,"bold"))
+        firstname.place(x=20,y=160)
+        firstnameenty=Entry(aw,font=("times new roman",15,"bold"),bd=5,relief=GROOVE)
+        firstnameenty.place(x=200,y=160)
+
+        lastname=Label(aw,text="Last Name",font=("times new roman",20,"bold"))
+        lastname.place(x=20,y=200)
+        lastnameenty=Entry(aw,font=("times new roman",15,"bold"),bd=5,relief=GROOVE)
+        lastnameenty.place(x=200,y=200)
+
+        gender=Label(aw,text="Gender",font=("times new roman",20,"bold"))
+        gender.place(x=20,y=240)
+        combo_gender=ttk.Combobox(aw,font=("tmes new roman",13,"bold"),state="readonly")
+        combo_gender['values']=("Male","Female")
+        combo_gender.place(x=200,y=240)
+
+
+        branch=Label(aw,text="Branch",font=("times new roman",20,"bold"))
+        branch.place(x=20,y=280)
+        combo_branch=ttk.Combobox(aw,font=("tmes new roman",13,"bold"),state="readonly")
+        combo_branch['values']=("CSE","IT","ECE","CIVIL","EEE","MECHANICAL")
+        combo_branch.place(x=200,y=280)
+
+        year=Label(aw,text="Year of Study",font=("times new roman",20,"bold"))
+        year.place(x=20,y=320)
+        combo_year=ttk.Combobox(aw,font=("tmes new roman",13,"bold"),state="readonly")
+        combo_year['values']=(1,2,3,4)
+        combo_year.place(x=200,y=320)
+
+        email=Label(aw,text="Email",font=("times new roman",20,"bold"))
+        email.place(x=20,y=360)
+        emailenty=Entry(aw,font=("times new roman",15,"bold"),bd=5,relief=GROOVE)
+        emailenty.place(x=200,y=360)
+
+        title3=Label(aw,text="Marks",font=("times new roman",20,"italic"),bg="#78ff78",fg="#742291")
+        title3.place(x=20,y=400)
+
+        c=Label(aw,text="C Language",font=("times new roman",20,"bold"))
+        c.place(x=20,y=440)
+        centy=Entry(aw,font=("times new roman",15,"bold"),bd=5,relief=GROOVE)
+        centy.place(x=200,y=440)
+
+        python=Label(aw,text="PYTHON",font=("times new roman",15,"bold"))
+        python.place(x=20,y=480)
+        pythonenty=Entry(aw,font=("times new roman",15,"bold"),bd=5,relief=GROOVE)
+        pythonenty.place(x=200,y=480)
+
+        java=Label(aw,text="JAVA",font=("times new roman",15,"bold"))
+        java.place(x=20,y=520)
+        javaenty=Entry(aw,font=("times new roman",15,"bold"),bd=5,relief=GROOVE)
+        javaenty.place(x=200,y=520)
+
+        ds=Label(aw,text="Data Struture",font=("times new roman",20,"bold"))
+        ds.place(x=20,y=560)
+        dsenty=Entry(aw,font=("times new roman",15,"bold"),bd=5,relief=GROOVE)
+        dsenty.place(x=200,y=560)
+
+        but_update=Button(aw,text="Update",font=("Times",20,"bold"),bg="#ffff73",fg="#ff444f",command=update)
+        but_update.place(x=30,y=620)
+
+        but_delete=Button(aw,text="Delete",font=("Times",20,"bold"),bg="#ffff73",fg="#ff444f",command=deletee)
+        but_delete.place(x=170,y=620)
+
+        but_clear=Button(aw,text="Clear",font=("Times",20,"bold"),bg="#ffff73",fg="#ff444f",command=clear)
+        but_clear.place(x=300,y=620)
+
+        detail_frame=Frame(aw,bd=4,relief=RIDGE,bg="crimson")
+        detail_frame.place(x=450,y=100,width=880,height=580)
+
+        lbl_serch=Label(detail_frame,text="Search By",bg="crimson",fg="white",font=("times new roman",20,"bold"))
+        lbl_serch.grid(row=0,column=0)
+
+        combo_search=ttk.Combobox(detail_frame,font=("tmes new roman",11,"bold"),state="readonly")
+        combo_search['values']=("RollNo","FirstName")
+        combo_search.grid(row=0,column=4,padx=20)
+
+        txt_search=Entry(detail_frame,font=("times new roman",11,"bold"),bd=5,relief=GROOVE)
+        txt_search.grid(row=0,column=8,padx=20)
+
+        search=Button(detail_frame,text="Search",width=15,command=search)
+        search.grid(row=0,column=13,padx=20)
+        showall=Button(detail_frame,text="Show All",width=15,command=showall)
+        showall.grid(row=0,column=17,padx=20)
+
+        table_frame=Frame(detail_frame,bd=4,relief=RIDGE,bg="crimson")
+        table_frame.place(x=10,y=60,width=850,height=495)
+
+        scroll_x=Scrollbar(table_frame,orient=HORIZONTAL)
+        scroll_y=Scrollbar(table_frame,orient=VERTICAL)
+        student_table=ttk.Treeview(table_frame,columns=("roll","fname","lname","gen","branch","yofstudy","email","c","python","java","ds"),xscrollcommand=scroll_x.set,yscrollcommand=scroll_y.set)
+        scroll_x.pack(side=BOTTOM,fill=X)
+        scroll_y.pack(side=RIGHT,fill=Y)
+        scroll_x.config(command=student_table.xview)
+        scroll_y.config(command=student_table.yview)
+
+        student_table.heading("roll",text="Roll No")
+        student_table.heading("fname",text="First Name")
+        student_table.heading("lname",text="Last Name")
+        student_table.heading("gen",text="Gender")
+        student_table.heading("branch",text="Branch")
+        student_table.heading("yofstudy",text="Year Of Study")
+        student_table.heading("email",text="Email")
+        student_table.heading("c",text="C Lang")
+        student_table.heading("python",text="Python")
+        student_table.heading("java",text="Java")
+        student_table.heading("ds",text="Data Structures")
+        student_table['show']='headings'
+
+        student_table.column("roll",width=100)
+        student_table.column("fname",width=100)
+        student_table.column("lname",width=100)
+        student_table.column("gen",width=100)
+        student_table.column("branch",width=100)
+        student_table.column("yofstudy",width=100)
+        student_table.column("email",width=100)
+        student_table.column("c",width=100)
+        student_table.column("python",width=100)
+        student_table.column("java",width=100)
+        student_table.column("ds",width=100)
+        student_table.pack(fill=BOTH,expand=1)
+        fetch_data()
+        student_table.bind("<ButtonRelease-1>",get_data)
+
+    slw=Toplevel()
+    slw.title('Login Form')
+    slw.geometry("1500x850")
+#=======background===========
+    left_lbl=Label(slw,bg="#08A3D2",bd=0)
+    left_lbl.place(x=0,y=0,relheight=1,width=670)
+    right_lbl=Label(slw,bg="#031F3C",bd=0)
+    right_lbl.place(x=670,y=0,relheight=1,relwidth=1)
+#=========title==============
+    title=Label(slw,text="Admin Login Form",font=("times new roman",40,"italic"),bg="#184520",fg="#ffff12")
+    title.place(x=0,y=0,relwidth=1)
+#==========exit button========
+    exitbutton=Button(title,text="Exit",width=15,bd=5,command=slw.destroy).pack(side='right',padx=20,pady=20)
+#=========frame===============
+    login_frame=Frame(slw,bg="white")
+    login_frame.place(x=250,y=100,width=800,height=500)
+#=========Image==============
+    my_pic=Image.open("C:\\Users\\admin\\Desktop\\images\\a1.jpg")
+    resized=my_pic.resize((300,300),Image.ANTIALIAS)
+    new_pic=ImageTk.PhotoImage(resized)
+    my_label=Label(login_frame,image=new_pic)
+    my_label.place(x=10,y=120,height=300,width=300)
+#=========username,password======
+    text=Label(login_frame,text="Login Here",font=("times new roman",40,"bold"),fg="#0BA3D2",bg="white")
+    text.place(x=350,y=50)
+    h3=Label(login_frame,text="Username",font=("times new roman",30,"italic"),bg="white",fg="gray")
+    h3.place(x=350,y=130)
+    h3entry=Entry(login_frame,font=("times new roman",20,"bold"),bd=5,relief=GROOVE,bg="white",fg="#de5122")
+    h3entry.place(x=350,y=200)
+    h4=Label(login_frame,text="Password",font=("times new roman",30,"italic"),bg="white",fg="gray")
+    h4.place(x=350,y=240)
+    h4entry=Entry(login_frame,font=("times new roman",20,"bold"),bd=5,relief=GROOVE,bg="white",fg="#de5122",)
+    h4entry.place(x=350,y=300)
+#=============login button===========
+    studentlogin=Button(login_frame,text="Login",font=("times new roman",20,"bold"),bg="#B00B57",fg="white",command=adminloginbuttonfunction)
+    studentlogin.place(x=350,y=370)
+    slw.mainloop()
+#==========student login funcion======
+def studentloginfunction():
+
+    def studentloginbuttonfunction():
+        if h3entry.get()==" " or h4entry.get()==" ":
+            MessageBox.showerror("Student Login Status","All fields are required")
+        elif h3entry.get()=="vvit" and h4entry.get()=="vvit":
+            studentfunction()
+        else:
+            MessageBox.showerror("Student Login Status","Invalid username or password") 
+    def studentfunction():
+        command=slw.destroy()
+        sw=Toplevel()
+        sw.geometry("1500x850")
+        sw.title('VVIT-Student')
+
+        def clear():
+            rollnumenty.delete(0,'end')
+            firstnameenty.delete(0,'end')
+            lastnameenty.delete(0,'end')
+            combo_gender.set(" ")
+            combo_branch.set(" ")
+            combo_year.set(" ")
+            emailenty.delete(0,'end')
+            centy.delete(0,'end')
+            pythonenty.delete(0,'end')
+            javaenty.delete(0,'end')
+            dsenty.delete(0,'end')
+
+        def submit():
+            rollnumber=rollnumenty.get()
+            first=firstnameenty.get()
+            last=lastnameenty.get()
+            gen=combo_gender.get()
+            br=combo_branch.get()
+            yearofstudy=combo_year.get()
+            mail=emailenty.get()
+            clang=centy.get()
+            pyt=pythonenty.get()
+            jaava=javaenty.get()
+            dss=dsenty.get()
+       
+            if(len(rollnumber)!=10 or len(first)==0 or len(last)==0 or len(gen)==0 or len(br)==0 or len(yearofstudy)==0 or len(mail)!=19 or len(clang)==0 or len(pyt)==0 or len(jaava)==0 or len(dss)==0):
+                MessageBox.showinfo("Submit Status","All fields are required with correct informatin")
+            else:
+                con=mysql.connect(host="localhost",user="root",password="nandhu118",database="project")
+                cursor=con.cursor()
+                cursor.execute("insert into student values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(rollnumber,first,last,gen,br,yearofstudy,mail,clang,pyt,jaava,dss))    
+                cursor.execute("commit");
+                rollnumenty.delete(0,'end')
+                firstnameenty.delete(0,'end')
+                lastnameenty.delete(0,'end')
+                combo_gender.delete(0,'end')
+                combo_branch.delete(0,'end')
+                combo_year.delete(0,'end')
+                emailenty.delete(0,'end')
+                centy.delete(0,'end')
+                pythonenty.delete(0,'end')
+                javaenty.delete(0,'end')
+                dsenty.delete(0,'end')
+                MessageBox.showinfo("Submit Status","Submission Successfull")
+                con.close()
+            
+
+
+        title1=Label(sw,text="Student DashBoard",font=("times new roman",40,"italic"),bg="#192045",fg="#ffff12")
+        title1.place(x=0,y=0,relwidth=1)
+        exit1button=Button(title1,text="Logout",width=15,bd=5,command=sw.destroy).pack(side='right',padx=20,pady=20)
+
+        title2=Label(sw,text="Enter details of the student",font=("times new roman",20,"italic"),bg="#78ff78",fg="#742291")
+        title2.place(x=2,y=75)
+
+        rollnum=Label(sw,text="Roll Number",font=("times new roman",20,"bold"))
+        rollnum.place(x=20,y=120)
+        rollnumenty=Entry(sw,font=("times new roman",15,"bold"),bd=5,relief=GROOVE)
+        rollnumenty.place(x=200,y=120)
+
+        firstname=Label(sw,text="First Name",font=("times new roman",20,"bold"))
+        firstname.place(x=20,y=160)
+        firstnameenty=Entry(sw,font=("times new roman",15,"bold"),bd=5,relief=GROOVE)
+        firstnameenty.place(x=200,y=160)
+
+        lastname=Label(sw,text="Last Name",font=("times new roman",20,"bold"))
+        lastname.place(x=20,y=200)
+        lastnameenty=Entry(sw,font=("times new roman",15,"bold"),bd=5,relief=GROOVE)
+        lastnameenty.place(x=200,y=200)
+
+        gender=Label(sw,text="Gender",font=("times new roman",20,"bold"))
+        gender.place(x=20,y=240)
+        combo_gender=ttk.Combobox(sw,font=("tmes new roman",13,"bold"),state="readonly")
+        combo_gender['values']=("Male","Female")
+        combo_gender.place(x=200,y=240)
+
+
+        branch=Label(sw,text="Branch",font=("times new roman",20,"bold"))
+        branch.place(x=20,y=280)
+        combo_branch=ttk.Combobox(sw,font=("tmes new roman",13,"bold"),state="readonly")
+        combo_branch['values']=("CSE","IT","ECE","CIVIL","EEE","MECHANICAL")
+        combo_branch.place(x=200,y=280)
+
+        year=Label(sw,text="Year of Study",font=("times new roman",20,"bold"))
+        year.place(x=20,y=320)
+        combo_year=ttk.Combobox(sw,font=("tmes new roman",13,"bold"),state="readonly")
+        combo_year['values']=(1,2,3,4)
+        combo_year.place(x=200,y=320)
+
+        email=Label(sw,text="Email",font=("times new roman",20,"bold"))
+        email.place(x=20,y=360)
+        emailenty=Entry(sw,font=("times new roman",15,"bold"),bd=5,relief=GROOVE)
+        emailenty.place(x=200,y=360)
+
+        title3=Label(sw,text="Marks",font=("times new roman",20,"italic"),bg="#78ff78",fg="#742291")
+        title3.place(x=20,y=400)
+
+        c=Label(sw,text="C Language",font=("times new roman",20,"bold"))
+        c.place(x=20,y=440)
+        centy=Entry(sw,font=("times new roman",15,"bold"),bd=5,relief=GROOVE)
+        centy.place(x=200,y=440)
+
+        python=Label(sw,text="PYTHON",font=("times new roman",15,"bold"))
+        python.place(x=20,y=480)
+        pythonenty=Entry(sw,font=("times new roman",15,"bold"),bd=5,relief=GROOVE)
+        pythonenty.place(x=200,y=480)
+
+        java=Label(sw,text="JAVA",font=("times new roman",15,"bold"))
+        java.place(x=20,y=520)
+        javaenty=Entry(sw,font=("times new roman",15,"bold"),bd=5,relief=GROOVE)
+        javaenty.place(x=200,y=520)
+
+        ds=Label(sw,text="Data Struture",font=("times new roman",20,"bold"))
+        ds.place(x=20,y=560)
+        dsenty=Entry(sw,font=("times new roman",15,"bold"),bd=5,relief=GROOVE)
+        dsenty.place(x=200,y=560)
+
+        but_submit=Button(sw,text="Submit",font=("Times",20,"bold"),bg="#ffff73",fg="#ff444f",command=submit)
+        but_submit.place(x=90,y=620)
+        but_clear=Button(sw,text="Clear",font=("Times",20,"bold"),bg="#ffff73",fg="#ff444f",command=clear)
+        but_clear.place(x=250,y=620)
+    slw=Toplevel()
+    slw.title('Login Form')
+    slw.geometry("1500x850")
+#=======background===========
+    left_lbl=Label(slw,bg="#08A3D2",bd=0)
+    left_lbl.place(x=0,y=0,relheight=1,width=670)
+    right_lbl=Label(slw,bg="#031F3C",bd=0)
+    right_lbl.place(x=670,y=0,relheight=1,relwidth=1)
+#=========title==============
+    title=Label(slw,text="Student Login Form",font=("times new roman",40,"italic"),bg="#184520",fg="#ffff12")
+    title.place(x=0,y=0,relwidth=1)
+#=========exit===============
+    exitbutton=Button(title,text="Exit",width=15,bd=5,command=slw.destroy).pack(side='right',padx=20,pady=20)
+#=========frame===============
+    login_frame=Frame(slw,bg="white")
+    login_frame.place(x=250,y=100,width=800,height=500)
+#=========Image==============
+    my_pic=Image.open("C:\\Users\\admin\\Desktop\\images\\s1.jpg")
+    resized=my_pic.resize((350,350),Image.ANTIALIAS)
+    new_pic=ImageTk.PhotoImage(resized)
+    my_label=Label(login_frame,image=new_pic)
+    my_label.place(x=0,y=70,height=350,width=350)
+#=========username,password======
+    text=Label(login_frame,text="Login Here",font=("times new roman",40,"bold"),fg="#0BA3D2",bg="white")
+    text.place(x=350,y=50)
+    h3=Label(login_frame,text="Username",font=("times new roman",30,"italic"),bg="white",fg="gray")
+    h3.place(x=350,y=130)
+    h3entry=Entry(login_frame,font=("times new roman",20,"bold"),bd=5,relief=GROOVE,bg="white",fg="#de5122")
+    h3entry.place(x=350,y=200)
+    h4=Label(login_frame,text="Password",font=("times new roman",30,"italic"),bg="white",fg="gray")
+    h4.place(x=350,y=240)
+    h4entry=Entry(login_frame,font=("times new roman",20,"bold"),bd=5,relief=GROOVE,bg="white",fg="#de5122",)
+    h4entry.place(x=350,y=300)
+#=============login button===========
+    studentlogin=Button(login_frame,text="Login",font=("times new roman",20,"bold"),bg="#B00B57",fg="white",command=studentloginbuttonfunction)
+    studentlogin.place(x=350,y=370)
+    
+    slw.mainloop()
+
+def resultfunction():
+    #==========subject function=========
+    def subjectfunction():
+        #============c function===========
+        def cfunction():
+            for widget in frame.winfo_children():
+                widget.destroy()
+            title=Label(frame,text="C-Language Performance Analysis",font=("times new roman",30),fg="#88324f",bg="#aedb9f")
+            title.place(x=400,y=2)
+
+            title=Label(frame,text="2017-2021",font=("times new roman",22),fg="#93011b",bg="#d0ae9b")
+            title.place(x=5,y=2)
+            title=Label(frame,text="Total Strength of students:",font=("times new roman",20),fg="black")
+            title.place(x=5,y=50)
+            title=Label(frame,text="Noof students passed:",font=("times new roman",20),fg="black")
+            title.place(x=5,y=95)
+           
+            title=Label(frame,text="2018-2022",font=("times new roman",22),fg="#93011b",bg="#d0ae9b")
+            title.place(x=5,y=145)
+            title=Label(frame,text="Total Strength of students:",font=("times new roman",20),fg="black")
+            title.place(x=5,y=195)
+            title=Label(frame,text="Noof students passed:",font=("times new roman",20),fg="black")
+            title.place(x=5,y=245)
+
+            title=Label(frame,text="2019-2023",font=("times new roman",22),fg="#93011b",bg="#d0ae9b")
+            title.place(x=5,y=295)
+            title=Label(frame,text="Total Strength of students:",font=("times new roman",20),fg="black")
+            title.place(x=5,y=345)
+            title=Label(frame,text="Noof students passed:",font=("times new roman",20),fg="black")
+            title.place(x=5,y=395)
+
+            title=Label(frame,text="2020-2024",font=("times new roman",22),fg="#93011b",bg="#d0ae9b")
+            title.place(x=5,y=445)
+            title=Label(frame,text="Total Strength of students:",font=("times new roman",20),fg="black")
+            title.place(x=5,y=495)
+            title=Label(frame,text="Noof students passed:",font=("times new roman",20),fg="black")
+            title.place(x=5,y=545)
+
+            l4=[]
+            l3=[]
+            l2=[]
+            l1=[]
+            con=mysql.connect(host="localhost",user="root",password="nandhu118",database="project")
+            cursor=con.cursor()
+            cursor.execute("select c from student where YearofStudy=4")
+            rows=cursor.fetchall()
+            j=0
+            if len(rows)!=0:
+                
+                for row in rows:
+                    r=list(row)
+                    l4.insert(j,r)
+                    j=j+1
+                con.commit()
+            j=0
+            cursor.execute("select c from student where YearofStudy=3")
+            rows=cursor.fetchall()
+            if len(rows)!=0:
+                
+                for row in rows:
+                    r=list(row)           
+                    l3.insert(j,r)
+                    j=j+1
+                con.commit()
+            j=0
+            cursor.execute("select c from student where YearofStudy=2")
+            rows=cursor.fetchall()
+            if len(rows)!=0:
+                
+                for row in rows:
+                    r=list(row)
+                    l2.insert(j,r)
+                    j=j+1
+                con.commit()
+            j=0
+            cursor.execute("select c from student where YearofStudy=1")
+            rows=cursor.fetchall()
+            if len(rows)!=0:
+                
+                for row in rows:
+                    r=list(row)
+                    l1.insert(j,r)
+                    j=j+1
+            con.commit()
+            con.close() 
+            e4=[]
+            e3=[]
+            e2=[]
+            e1=[]
+
+            for i in l4:
+                for j in i:
+                    e4.append(int(j))
+
+            for i in l3:
+                for j in i:
+                    e3.append(int(j))
+
+            for i in l2:
+                for j in i:
+                    e2.append(int(j))
+
+            for i in l1:
+                for j in i:
+                    e1.append(int(j))
+
+
+            l=[]
+            e4t=len(e4)
+            e4n=0
+            for i in e4:
+                if(i>50):
+                    e4n+=1
+            p4=(e4n/e4t)*100
+            c4=p4
+            l.append(p4)
+
+            title=Label(frame,text=e4t,font=("times new roman",20),fg="black")
+            title.place(x=300,y=50)
+            title=Label(frame,text=e4n,font=("times new roman",20),fg="black")
+            title.place(x=250,y=95)
+
+
+            e3t=len(e3)
+            e3n=0
+            for i in e3:
+                if(i>50):
+                    e3n+=1
+            p3=(e3n/e3t)*100
+            c3=p3
+            l.append(p3)
+
+            title=Label(frame,text=e3t,font=("times new roman",20),fg="black")
+            title.place(x=300,y=195)
+            title=Label(frame,text=e3n,font=("times new roman",20),fg="black")
+            title.place(x=250,y=245)
+
+
+            e2t=len(e2)
+            e2n=0
+            for i in e2:
+                if(i>50):
+                    e2n+=1
+            p2=(e2n/e2t)*100
+            c2=p2
+            l.append(p2)
+
+            title=Label(frame,text=e2t,font=("times new roman",20),fg="black")
+            title.place(x=300,y=345)
+            title=Label(frame,text=e2n,font=("times new roman",20),fg="black")
+            title.place(x=250,y=395)
+
+
+            e1t=len(e1)
+            e1n=0
+            for i in e1:
+                if(i>50):
+                    e1n+=1
+            p1=(e1n/e1t)*100
+            c1=p1
+            l.append(p1)
+
+            title=Label(frame,text=e1t,font=("times new roman",20),fg="black")
+            title.place(x=300,y=495)
+            title=Label(frame,text=e1n,font=("times new roman",20),fg="black")
+            title.place(x=250,y=545)
+
+            w=['2017-2021','2018-2022','2019-2023','2020-2024']
+            data1={'Academic year':w,'passpercentage':l}
+            df1=DataFrame(data1,columns=['Academic year','passpercentage'])     
+
+            figure1=plt.Figure(figsize=(6,5),dpi=100)
+            ax1=figure1.add_subplot(111)
+            bar1=FigureCanvasTkAgg(figure1,frame)
+            bar1.get_tk_widget().place(x=400,y=80,height=500,width=650)
+            df1=df1[['Academic year','passpercentage']].groupby('Academic year').sum()
+            df1.plot(kind='line',legend=True,ax=ax1,color='r',marker='o',fontsize=10)
+            ax1.set_title('Acadmic year vs Pass Percentage')
+#==============python function=================
+        def python():
+            for widget in frame.winfo_children():
+                widget.destroy()
+
+            title=Label(frame,text="Python Performance Analysis",font=("times new roman",30),fg="#88324f",bg="#aedb9f")
+            title.place(x=400,y=2)
+            
+            title=Label(frame,text="2017-2021",font=("times new roman",22),fg="#93011b",bg="#d0ae9b")
+            title.place(x=5,y=2)
+            title=Label(frame,text="Total Strength of students:",font=("times new roman",20),fg="black")
+            title.place(x=5,y=50)
+            title=Label(frame,text="Noof students passed:",font=("times new roman",20),fg="black")
+            title.place(x=5,y=95)
+           
+            title=Label(frame,text="2018-2022",font=("times new roman",22),fg="#93011b",bg="#d0ae9b")
+            title.place(x=5,y=145)
+            title=Label(frame,text="Total Strength of students:",font=("times new roman",20),fg="black")
+            title.place(x=5,y=195)
+            title=Label(frame,text="Noof students passed:",font=("times new roman",20),fg="black")
+            title.place(x=5,y=245)
+
+            title=Label(frame,text="2019-2023",font=("times new roman",22),fg="#93011b",bg="#d0ae9b")
+            title.place(x=5,y=295)
+            title=Label(frame,text="Total Strength of students:",font=("times new roman",20),fg="black")
+            title.place(x=5,y=345)
+            title=Label(frame,text="Noof students passed:",font=("times new roman",20),fg="black")
+            title.place(x=5,y=395)
+
+            title=Label(frame,text="2020-2024",font=("times new roman",22),fg="#93011b",bg="#d0ae9b")
+            title.place(x=5,y=445)
+            title=Label(frame,text="Total Strength of students:",font=("times new roman",20),fg="black")
+            title.place(x=5,y=495)
+            title=Label(frame,text="Noof students passed:",font=("times new roman",20),fg="black")
+            title.place(x=5,y=545)
+
+            l4=[]
+            l3=[]
+            l2=[]
+            l1=[]
+            con=mysql.connect(host="localhost",user="root",password="nandhu118",database="project")
+            cursor=con.cursor()
+            cursor.execute("select Python from student where YearofStudy=4")
+            rows=cursor.fetchall()
+            j=0
+            if len(rows)!=0:
+                
+                for row in rows:
+                    r=list(row)
+                    l4.insert(j,r)
+                    j=j+1
+                con.commit()
+            j=0
+            cursor.execute("select Python from student where YearofStudy=3")
+            rows=cursor.fetchall()
+            if len(rows)!=0:
+                
+                for row in rows:
+                    r=list(row)           
+                    l3.insert(j,r)
+                    j=j+1
+                con.commit()
+            j=0
+            cursor.execute("select Python from student where YearofStudy=2")
+            rows=cursor.fetchall()
+            if len(rows)!=0:
+                
+                for row in rows:
+                    r=list(row)
+                    l2.insert(j,r)
+                    j=j+1
+                con.commit()
+            j=0
+            cursor.execute("select Python from student where YearofStudy=1")
+            rows=cursor.fetchall()
+            if len(rows)!=0:
+                
+                for row in rows:
+                    r=list(row)
+                    l1.insert(j,r)
+                    j=j+1
+            con.commit()
+            con.close() 
+            e4=[]
+            e3=[]
+            e2=[]
+            e1=[]
+
+            for i in l4:
+                for j in i:
+                    e4.append(int(j))
+
+            for i in l3:
+                for j in i:
+                    e3.append(int(j))
+
+            for i in l2:
+                for j in i:
+                    e2.append(int(j))
+
+            for i in l1:
+                for j in i:
+                    e1.append(int(j))
+
+
+            l=[]
+            e4t=len(e4)
+            e4n=0
+            for i in e4:
+                if(i>50):
+                    e4n+=1
+            p4=(e4n/e4t)*100
+            pp4=p4
+            l.append(p4)
+
+            title=Label(frame,text=e4t,font=("times new roman",20),fg="black")
+            title.place(x=300,y=50)
+            title=Label(frame,text=e4n,font=("times new roman",20),fg="black")
+            title.place(x=250,y=95)
+
+
+            e3t=len(e3)
+            e3n=0
+            for i in e3:
+                if(i>50):
+                    e3n+=1
+            p3=(e3n/e3t)*100
+            pp3=p3
+            l.append(p3)
+
+            title=Label(frame,text=e3t,font=("times new roman",20),fg="black")
+            title.place(x=300,y=195)
+            title=Label(frame,text=e3n,font=("times new roman",20),fg="black")
+            title.place(x=250,y=245)
+
+
+            e2t=len(e2)
+            e2n=0
+            for i in e2:
+                if(i>50):
+                    e2n+=1
+            p2=(e2n/e2t)*100
+            pp2=p2
+            l.append(p2)
+
+            title=Label(frame,text=e2t,font=("times new roman",20),fg="black")
+            title.place(x=300,y=345)
+            title=Label(frame,text=e2n,font=("times new roman",20),fg="black")
+            title.place(x=250,y=395)
+
+
+            e1t=len(e1)
+            e1n=0
+            for i in e1:
+                if(i>50):
+                    e1n+=1
+            p1=(e1n/e1t)*100
+            pp1=p1
+            l.append(p1)
+
+            title=Label(frame,text=e1t,font=("times new roman",20),fg="black")
+            title.place(x=300,y=495)
+            title=Label(frame,text=e1n,font=("times new roman",20),fg="black")
+            title.place(x=250,y=545)
+
+            w=['2017-2021','2018-2022','2019-2023','2020-2024']
+            data1={'Academic year':w,'passpercentage':l}
+            df1=DataFrame(data1,columns=['Academic year','passpercentage'])     
+
+            figure1=plt.Figure(figsize=(6,5),dpi=100)
+            ax1=figure1.add_subplot(111)
+            bar1=FigureCanvasTkAgg(figure1,frame)
+            bar1.get_tk_widget().place(x=400,y=80,height=500,width=650)
+            df1=df1[['Academic year','passpercentage']].groupby('Academic year').sum()
+            df1.plot(kind='line',legend=True,ax=ax1,color='r',marker='o',fontsize=10)
+            ax1.set_title('Acadmic year vs Pass Percentage')
+#=======================java function==================
+        def java():
+            for widget in frame.winfo_children():
+                widget.destroy()
+            title=Label(frame,text="Java Performance Analysis",font=("times new roman",30),fg="#88324f",bg="#aedb9f")
+            title.place(x=400,y=2)
+
+            title=Label(frame,text="2017-2021",font=("times new roman",22),fg="#93011b",bg="#d0ae9b")
+            title.place(x=5,y=2)
+            title=Label(frame,text="Total Strength of students:",font=("times new roman",20),fg="black")
+            title.place(x=5,y=50)
+            title=Label(frame,text="Noof students passed:",font=("times new roman",20),fg="black")
+            title.place(x=5,y=95)
+           
+            title=Label(frame,text="2018-2022",font=("times new roman",22),fg="#93011b",bg="#d0ae9b")
+            title.place(x=5,y=145)
+            title=Label(frame,text="Total Strength of students:",font=("times new roman",20),fg="black")
+            title.place(x=5,y=195)
+            title=Label(frame,text="Noof students passed:",font=("times new roman",20),fg="black")
+            title.place(x=5,y=245)
+
+            title=Label(frame,text="2019-2023",font=("times new roman",22),fg="#93011b",bg="#d0ae9b")
+            title.place(x=5,y=295)
+            title=Label(frame,text="Total Strength of students:",font=("times new roman",20),fg="black")
+            title.place(x=5,y=345)
+            title=Label(frame,text="Noof students passed:",font=("times new roman",20),fg="black")
+            title.place(x=5,y=395)
+
+            title=Label(frame,text="2020-2024",font=("times new roman",22),fg="#93011b",bg="#d0ae9b")
+            title.place(x=5,y=445)
+            title=Label(frame,text="Total Strength of students:",font=("times new roman",20),fg="black")
+            title.place(x=5,y=495)
+            title=Label(frame,text="Noof students passed:",font=("times new roman",20),fg="black")
+            title.place(x=5,y=545)
+
+            l4=[]
+            l3=[]
+            l2=[]
+            l1=[]
+            con=mysql.connect(host="localhost",user="root",password="nandhu118",database="project")
+            cursor=con.cursor()
+            cursor.execute("select Java from student where YearofStudy=4")
+            rows=cursor.fetchall()
+            j=0
+            if len(rows)!=0:
+                
+                for row in rows:
+                    r=list(row)
+                    l4.insert(j,r)
+                    j=j+1
+                con.commit()
+            j=0
+            cursor.execute("select Java from student where YearofStudy=3")
+            rows=cursor.fetchall()
+            if len(rows)!=0:
+                
+                for row in rows:
+                    r=list(row)           
+                    l3.insert(j,r)
+                    j=j+1
+                con.commit()
+            j=0
+            cursor.execute("select Java from student where YearofStudy=2")
+            rows=cursor.fetchall()
+            if len(rows)!=0:
+                
+                for row in rows:
+                    r=list(row)
+                    l2.insert(j,r)
+                    j=j+1
+                con.commit()
+            j=0
+            cursor.execute("select Java from student where YearofStudy=1")
+            rows=cursor.fetchall()
+            if len(rows)!=0:
+                
+                for row in rows:
+                    r=list(row)
+                    l1.insert(j,r)
+                    j=j+1
+            con.commit()
+            con.close() 
+            e4=[]
+            e3=[]
+            e2=[]
+            e1=[]
+
+            for i in l4:
+                for j in i:
+                    e4.append(int(j))
+
+            for i in l3:
+                for j in i:
+                    e3.append(int(j))
+
+            for i in l2:
+                for j in i:
+                    e2.append(int(j))
+
+            for i in l1:
+                for j in i:
+                    e1.append(int(j))
+
+
+            l=[]
+            e4t=len(e4)
+            e4n=0
+            for i in e4:
+                if(i>50):
+                    e4n+=1
+            p4=(e4n/e4t)*100
+            j4=p4
+            l.append(p4)
+
+            title=Label(frame,text=e4t,font=("times new roman",20),fg="black")
+            title.place(x=300,y=50)
+            title=Label(frame,text=e4n,font=("times new roman",20),fg="black")
+            title.place(x=250,y=95)
+
+
+            e3t=len(e3)
+            e3n=0
+            for i in e3:
+                if(i>50):
+                    e3n+=1
+            p3=(e3n/e3t)*100
+            j3=p3
+            l.append(p3)
+
+            title=Label(frame,text=e3t,font=("times new roman",20),fg="black")
+            title.place(x=300,y=195)
+            title=Label(frame,text=e3n,font=("times new roman",20),fg="black")
+            title.place(x=250,y=245)
+
+
+            e2t=len(e2)
+            e2n=0
+            for i in e2:
+                if(i>50):
+                    e2n+=1
+            p2=(e2n/e2t)*100
+            j2=p2
+            l.append(p2)
+
+            title=Label(frame,text=e2t,font=("times new roman",20),fg="black")
+            title.place(x=300,y=345)
+            title=Label(frame,text=e2n,font=("times new roman",20),fg="black")
+            title.place(x=250,y=395)
+
+
+            e1t=len(e1)
+            e1n=0
+            for i in e1:
+                if(i>50):
+                    e1n+=1
+            p1=(e1n/e1t)*100
+            j1=p1
+            l.append(p1)
+
+            title=Label(frame,text=e1t,font=("times new roman",20),fg="black")
+            title.place(x=300,y=495)
+            title=Label(frame,text=e1n,font=("times new roman",20),fg="black")
+            title.place(x=250,y=545)
+
+            w=['2017-2021','2018-2022','2019-2023','2020-2024']
+            data1={'Academic year':w,'passpercentage':l}
+            df1=DataFrame(data1,columns=['Academic year','passpercentage'])     
+
+            figure1=plt.Figure(figsize=(6,5),dpi=100)
+            ax1=figure1.add_subplot(111)
+            bar1=FigureCanvasTkAgg(figure1,frame)
+            bar1.get_tk_widget().place(x=400,y=80,height=500,width=650)
+            df1=df1[['Academic year','passpercentage']].groupby('Academic year').sum()
+            df1.plot(kind='line',legend=True,ax=ax1,color='r',marker='o',fontsize=10)
+            ax1.set_title('Acadmic year vs Pass Percentage')
+#================ds function===============
+        def ds():
+            for widget in frame.winfo_children():
+                widget.destroy()
+            title=Label(frame,text="Data Structure Performance Analysis",font=("times new roman",30),fg="#88324f",bg="#aedb9f")
+            title.place(x=400,y=2)
+
+            title=Label(frame,text="2017-2021",font=("times new roman",22),fg="#93011b",bg="#d0ae9b")
+            title.place(x=5,y=2)
+            title=Label(frame,text="Total Strength of students:",font=("times new roman",20),fg="black")
+            title.place(x=5,y=50)
+            title=Label(frame,text="Noof students passed:",font=("times new roman",20),fg="black")
+            title.place(x=5,y=95)
+           
+            title=Label(frame,text="2018-2022",font=("times new roman",22),fg="#93011b",bg="#d0ae9b")
+            title.place(x=5,y=145)
+            title=Label(frame,text="Total Strength of students:",font=("times new roman",20),fg="black")
+            title.place(x=5,y=195)
+            title=Label(frame,text="Noof students passed:",font=("times new roman",20),fg="black")
+            title.place(x=5,y=245)
+
+            title=Label(frame,text="2019-2023",font=("times new roman",22),fg="#93011b",bg="#d0ae9b")
+            title.place(x=5,y=295)
+            title=Label(frame,text="Total Strength of students:",font=("times new roman",20),fg="black")
+            title.place(x=5,y=345)
+            title=Label(frame,text="Noof students passed:",font=("times new roman",20),fg="black")
+            title.place(x=5,y=395)
+
+            title=Label(frame,text="2020-2024",font=("times new roman",22),fg="#93011b",bg="#d0ae9b")
+            title.place(x=5,y=445)
+            title=Label(frame,text="Total Strength of students:",font=("times new roman",20),fg="black")
+            title.place(x=5,y=495)
+            title=Label(frame,text="Noof students passed:",font=("times new roman",20),fg="black")
+            title.place(x=5,y=545)
+
+            l4=[]
+            l3=[]
+            l2=[]
+            l1=[]
+            con=mysql.connect(host="localhost",user="root",password="nandhu118",database="project")
+            cursor=con.cursor()
+            cursor.execute("select DS from student where YearofStudy=4")
+            rows=cursor.fetchall()
+            j=0
+            if len(rows)!=0:
+                
+                for row in rows:
+                    r=list(row)
+                    l4.insert(j,r)
+                    j=j+1
+                con.commit()
+            j=0
+            cursor.execute("select DS from student where YearofStudy=3")
+            rows=cursor.fetchall()
+            if len(rows)!=0:
+                
+                for row in rows:
+                    r=list(row)           
+                    l3.insert(j,r)
+                    j=j+1
+                con.commit()
+            j=0
+            cursor.execute("select DS from student where YearofStudy=2")
+            rows=cursor.fetchall()
+            if len(rows)!=0:
+                
+                for row in rows:
+                    r=list(row)
+                    l2.insert(j,r)
+                    j=j+1
+                con.commit()
+            j=0
+            cursor.execute("select DS from student where YearofStudy=1")
+            rows=cursor.fetchall()
+            if len(rows)!=0:
+                
+                for row in rows:
+                    r=list(row)
+                    l1.insert(j,r)
+                    j=j+1
+            con.commit()
+            con.close() 
+            e4=[]
+            e3=[]
+            e2=[]
+            e1=[]
+
+            for i in l4:
+                for j in i:
+                    e4.append(int(j))
+
+            for i in l3:
+                for j in i:
+                    e3.append(int(j))
+
+            for i in l2:
+                for j in i:
+                    e2.append(int(j))
+
+            for i in l1:
+                for j in i:
+                    e1.append(int(j))
+
+
+            l=[]
+            e4t=len(e4)
+            e4n=0
+            for i in e4:
+                if(i>50):
+                    e4n+=1
+            p4=(e4n/e4t)*100
+            d4=p4
+            l.append(p4)
+
+            title=Label(frame,text=e4t,font=("times new roman",20),fg="black")
+            title.place(x=300,y=50)
+            title=Label(frame,text=e4n,font=("times new roman",20),fg="black")
+            title.place(x=250,y=95)
+
+
+            e3t=len(e3)
+            e3n=0
+            for i in e3:
+                if(i>50):
+                    e3n+=1
+            p3=(e3n/e3t)*100
+            d3=p3
+            l.append(p3)
+
+            title=Label(frame,text=e3t,font=("times new roman",20),fg="black")
+            title.place(x=300,y=195)
+            title=Label(frame,text=e3n,font=("times new roman",20),fg="black")
+            title.place(x=250,y=245)
+
+
+            e2t=len(e2)
+            e2n=0
+            for i in e2:
+                if(i>50):
+                    e2n+=1
+            p2=(e2n/e2t)*100
+            d2=p2
+            l.append(p2)
+
+            title=Label(frame,text=e2t,font=("times new roman",20),fg="black")
+            title.place(x=300,y=345)
+            title=Label(frame,text=e2n,font=("times new roman",20),fg="black")
+            title.place(x=250,y=395)
+
+
+            e1t=len(e1)
+            e1n=0
+            for i in e1:
+                if(i>50):
+                    e1n+=1
+            p1=(e1n/e1t)*100
+            d1=p1
+            l.append(p1)
+
+            title=Label(frame,text=e1t,font=("times new roman",20),fg="black")
+            title.place(x=300,y=495)
+            title=Label(frame,text=e1n,font=("times new roman",20),fg="black")
+            title.place(x=250,y=545)
+
+            w=['2017-2021','2018-2022','2019-2023','2020-2024']
+            data1={'Academic year':w,'passpercentage':l}
+            df1=DataFrame(data1,columns=['Academic year','passpercentage'])     
+
+            figure1=plt.Figure(figsize=(6,5),dpi=100)
+            ax1=figure1.add_subplot(111)
+            bar1=FigureCanvasTkAgg(figure1,frame)
+            bar1.get_tk_widget().place(x=400,y=80,height=500,width=650)
+            df1=df1[['Academic year','passpercentage']].groupby('Academic year').sum()
+            df1.plot(kind='line',legend=True,ax=ax1,color='r',marker='o',fontsize=10)
+            ax1.set_title('Acadmic year vs Pass Percentage')
+
+
+        rsw=Toplevel()
+        rsw.title('Result Window')
+        rsw.geometry("1500x850")
+        #=================title=============
+        title=Label(rsw,text="Pass Percentage in Subjects",font=("times new roman",40,"italic"),bg="#ff6347",fg="white")
+        title.place(x=0,y=0,relwidth=1)
+        #================exit==========
+        exitbutton=Button(title,text="Exit",bd=5,width=15,command=rsw.destroy).pack(side='right',padx=20,pady=20)
+        #===========frame==================
+        frame1=Frame(rsw,bg="white")
+        frame1.place(x=0,y=78,width=200,height=700) 
+        #==========buttons=================
+        clogin=Button(frame1,text="C",font=("times new roman",20,"bold"),bg="DodgerBLUE",fg="white",command=cfunction)
+        clogin.place(x=0,y=0,relwidth=1,height=100)
+        pythonlogin=Button(frame1,text="PYTHON",font=("times new roman",20,"bold"),bg="DodgerBLUE",fg="white",command=python)
+        pythonlogin.place(x=0,y=100,relwidth=1,height=100)
+        javalogin=Button(frame1,text="JAVA",font=("times new roman",20,"bold"),bg="DodgerBLUE",fg="white",command=java)
+        javalogin.place(x=0,y=200,relwidth=1,height=100)
+        dslogin=Button(frame1,text="DS",font=("times new roman",20,"bold"),bg="DodgerBLUE",fg="white",command=ds)
+        dslogin.place(x=0,y=300,relwidth=1,height=100)
+        exitbutton=Button(frame1,text="Exit",font=("times new roman",20,"bold"),width=50,height=40,fg="white",bg="DodgerBlue",command=rsw.destroy)
+        exitbutton.place(x=0,y=400,relwidth=1,height=100)
+        #===============Image================
+        frame_icon=ImageTk.PhotoImage(file="C:\\Users\\admin\\Desktop\\images\\bg3.jpg")
+        frame_lbl=Label(frame1,image=frame_icon,width=200,height=200)
+        frame_lbl.place(x=0,y=495)
+        #=============Frame===============
+        frame=Frame(rsw)
+        frame.place(x=202,y=78,width=1300,height=1500) 
+        rsw.mainloop()
+    def studentresultfunction():
+        def resultsearch():
+            #===========cleaning frame=========
+            for widget in frame1.winfo_children():
+                widget.destroy()
+            for widget in frame2.winfo_children():
+                widget.destroy()
+            
+#=====================labels======================
+            title=Label(frame1,text="First Name",font=("times new roman",20,'underline'),fg="black",bg="white")
+            title.place(x=5,y=2)
+            title=Label(frame1,text="Last Name",font=("times new roman",20,'underline'),fg="black",bg="white")
+            title.place(x=5,y=50)
+            title=Label(frame1,text="Year of study",font=("times new roman",20,'underline'),fg="black",bg="white")
+            title.place(x=5,y=100)
+            title=Label(frame1,text="C-Language",font=("times new roman",20,'underline'),fg="black",bg="white")
+            title.place(x=5,y=150)
+            title=Label(frame1,text="Python",font=("times new roman",20,'underline'),fg="black",bg="white")
+            title.place(x=5,y=200)
+            title=Label(frame1,text="Java",font=("times new roman",20,'underline'),fg="black",bg="white")
+            title.place(x=5,y=250)
+            title=Label(frame1,text="DS",font=("times new roman",20,'underline'),fg="black",bg="white")
+            title.place(x=5,y=300)
+            title=Label(frame1,text="Percentage",font=("times new roman",30,'underline'),fg="black",bg="white")
+            title.place(x=5,y=350)
+            title=Label(frame1,text="Grade",font=("times new roman",30,'underline'),fg="black",bg="white")
+            title.place(x=5,y=420)
+            title=Label(frame1,text="Result",font=("times new roman",30,'underline'),fg="black",bg="white")
+            title.place(x=5,y=500)
+
+            title=Label(frame1,text="--",font=("times new roman",20),fg="black",bg="white")
+            title.place(x=200,y=2)
+            title=Label(frame1,text="--",font=("times new roman",20),fg="black",bg="white")
+            title.place(x=200,y=50)
+            title=Label(frame1,text="--",font=("times new roman",20),fg="black",bg="white")
+            title.place(x=200,y=100)
+            title=Label(frame1,text="--",font=("times new roman",20),fg="black",bg="white")
+            title.place(x=200,y=150)
+            title=Label(frame1,text="--",font=("times new roman",20),fg="black",bg="white")
+            title.place(x=200,y=200)
+            title=Label(frame1,text="--",font=("times new roman",20),fg="black",bg="white")
+            title.place(x=200,y=250)
+            title=Label(frame1,text="--",font=("times new roman",20),fg="black",bg="white")
+            title.place(x=200,y=300)
+            title=Label(frame1,text="--",font=("times new roman",30),fg="black",bg="white")
+            title.place(x=200,y=350)
+            title=Label(frame1,text="--",font=("times new roman",30),fg="black",bg="white")
+            title.place(x=200,y=420)
+            title=Label(frame1,text="--",font=("times new roman",30),fg="black",bg="white")
+            title.place(x=200,y=500)
+
+
+            listofmarks=[]
+            e=[]
+            s=txt_search.get()
+            con=mysql.connect(host="localhost",user="root",password="nandhu118",database="project")
+            cursor=con.cursor()
+
+            cursor.execute("select FirstName from student where  RollNumber='"+s+"'")
+            rows=cursor.fetchall()
+            title=Label(frame1,text=rows,font=("times new roman",20),fg="black",bg="white")
+            title.place(x=250,y=2)
+
+            cursor.execute("select LastName from student where  RollNumber='"+s+"'")
+            rows=cursor.fetchall()
+            title=Label(frame1,text=rows,font=("times new roman",20),fg="black",bg="white")
+            title.place(x=250,y=50)
+
+            cursor.execute("select YearofStudy from student where  RollNumber='"+s+"'")
+            rows=cursor.fetchall()
+            title=Label(frame1,text=rows,font=("times new roman",20),fg="black",bg="white")
+            title.place(x=250,y=100)
+
+            cursor.execute("select C from student where  RollNumber='"+s+"'")
+            rows=cursor.fetchall()
+            title=Label(frame1,text=rows,font=("times new roman",20),fg="black",bg="white")
+            title.place(x=250,y=150)
+
+            cursor.execute("select Python from student where  RollNumber='"+s+"'")
+            rows=cursor.fetchall()
+            title=Label(frame1,text=rows,font=("times new roman",20),fg="black",bg="white")
+            title.place(x=250,y=200)
+
+            cursor.execute("select Java from student where  RollNumber='"+s+"'")
+            rows=cursor.fetchall()
+            title=Label(frame1,text=rows,font=("times new roman",20),fg="black",bg="white")
+            title.place(x=250,y=250)
+
+            cursor.execute("select DS from student where  RollNumber='"+s+"'")
+            rows=cursor.fetchall()
+            title=Label(frame1,text=rows,font=("times new roman",20),fg="black",bg="white")
+            title.place(x=250,y=300)
+
+            cursor.execute("select c from student where  RollNumber='"+s+"'")
+            rows=cursor.fetchall()
+            j=0
+            if len(rows)!=0:
+                
+                for row in rows:
+                    r=list(row)
+                    listofmarks.insert(j,r)
+                con.commit()
+            j=j+1
+            cursor.execute("select python from student where  RollNumber='"+s+"'")
+            rows=cursor.fetchall()
+            if len(rows)!=0:
+                
+                for row in rows:
+                    r=list(row)           
+                    listofmarks.insert(j,r)
+            con.commit()
+            j=j+1
+            cursor.execute("select ds from student where  RollNumber='"+s+"'")
+            rows=cursor.fetchall()
+            if len(rows)!=0:
+                
+                for row in rows:
+                    r=list(row)
+                    listofmarks.insert(j,r)
+                con.commit()
+            j=j+1
+            cursor.execute("select java from student where  RollNumber='"+s+"'")
+            rows=cursor.fetchall()
+            if len(rows)!=0:
+                
+                for row in rows:
+                    r=list(row)
+                    listofmarks.insert(j,r)
+                con.commit()
+            con.close() 
+            for i in listofmarks:
+                for j in i:
+                    e.append(j)
+            
+            x=["c","python","DS","java"]
+            data1={'Subjects':x,'Marks':e}
+            df1=DataFrame(data1,columns=['Subjects','Marks'])
+
+            figure1=plt.Figure(figsize=(6,5),dpi=100)
+            ax1=figure1.add_subplot(111)
+            bar1=FigureCanvasTkAgg(figure1,frame2)
+            bar1.get_tk_widget().place(x=10,y=30,width=510,height=550)
+            df1=df1[['Subjects','Marks']].groupby('Subjects').sum()
+            df1.plot(kind='bar',legend=True,ax=ax1)
+            ax1.set_title('subjects vs Marks secured')
+            
+            s=sum(e)/4
+            title=Label(frame1,text=s,font=("times new roman",30),fg="black",bg="white")
+            title.place(x=250,y=350)
+
+            if(s>90):
+                title=Label(frame1,text='O',font=("times new roman",30),fg="black",bg="white")
+                title.place(x=250,y=420)
+            elif(s>80 and s<=90):
+                title=Label(frame1,text='S',font=("times new roman",30),fg="black",bg="white")
+                title.place(x=250,y=420)
+            elif(s>70 and s<=80):
+                title=Label(frame1,text='A',font=("times new roman",30),fg="black",bg="white")
+                title.place(x=250,y=420)
+            elif(s>60 and s<=70):
+                title=Label(frame1,text='B',font=("times new roman",30),fg="black",bg="white")
+                title.place(x=250,y=420)
+            elif(s>50 and s<=60):
+                title=Label(frame1,text='C',font=("times new roman",30),fg="black",bg="white")
+                title.place(x=250,y=420)
+            else:
+                title=Label(frame1,text='D',font=("times new roman",30),fg="black",bg="white")
+                title.place(x=250,y=420)
+
+            if(s>50):
+                title=Label(frame1,text='PASS',font=("times new roman",30),fg="green",bg="white")
+                title.place(x=250,y=500)
+            else:
+                title=Label(frame1,text='Fail',font=("times new roman",30),fg="red",bg="white")
+                title.place(x=250,y=420)
+
+            x1=["%"]
+            e1=[s]
+
+            data2={'percentagee':x1,'Percentage':e1}
+            df2=DataFrame(data2,columns=['percentagee','Percentage'])
+
+            figure2=plt.Figure(figsize=(3,4),dpi=80)
+            ax2=figure2.add_subplot(111)
+            bar2=FigureCanvasTkAgg(figure2,frame2)
+            bar2.get_tk_widget().place(x=530,y=30,height=550,width=450)
+            df2=df2[['percentagee','Percentage']].groupby('percentagee').sum()
+            df2.plot(kind='bar',legend=True,ax=ax2,width=0.3)
+            ax2.set_title('Percentage of Student')
+            
+
+
+
+        rslw=Toplevel()
+        rslw.title('Result Window')
+        rslw.geometry("1500x850")
+        #=================title=============
+        title=Label(rslw,text="Result of Students",font=("times new roman",40,"italic"),bg="#e43b06",fg="white")
+        title.place(x=0,y=0,relwidth=1)
+        #================exit==========
+        exitbutton=Button(title,text="Exit",bd=5,width=15,command=rslw.destroy).pack(side='right',padx=20,pady=20)
+        #=============search  button,entry==========
+        search=Button(rslw,text="Search",width=15,font=("times new roman",19,"italic"),bg="DodgerBlue",fg="white",command=resultsearch)
+        search.place(x=5,y=88,width=140,height=40)
+        txt_search=Entry(rslw,font=("times new roman",15,"bold"),bd=5,relief=GROOVE)
+        txt_search.place(x=170,y=88,width=200,height=40)
+        #============frame==============
+        frame1=Frame(rslw,bg="white")
+        frame1.place(x=2,y=140,width=400,height=565) 
+        frame2=Frame(rslw,bg="white")
+        frame2.place(x=380,y=80,width=1500,height=1500) 
+    #================estimation function====================
+    def estimation():
+        y7=[]
+        y8=[]
+        y9=[]
+        y20=[]
+
+        row=Toplevel()
+        row.title('Result Window')
+        row.geometry("1500x850")
+        #=====================label================
+        title=Label(row,text="Estimation of Pass Percentage in all subjects",font=("times new roman",40,"italic"),bg="#ff6347",fg="white")
+        title.place(x=0,y=0,relwidth=1)
+        #================exit==========
+        exitbutton=Button(title,text="Exit",bd=5,width=15,command=row.destroy).pack(side='right',padx=20,pady=20)
+        #============frame==============
+        frame=Frame(row,bg="white")
+        frame.place(x=0,y=70,width=1500,height=1500) 
+        #==============code -1=============
+        l4=[]
+        l3=[]
+        l2=[]
+        l1=[]
+        con=mysql.connect(host="localhost",user="root",password="nandhu118",database="project")
+        cursor=con.cursor()
+        cursor.execute("select c from student where YearofStudy=4")
+        rows=cursor.fetchall()
+        j=0
+        if len(rows)!=0:
+                
+            for row in rows:
+                r=list(row)
+                l4.insert(j,r)
+                j=j+1
+            con.commit()
+        j=0
+        cursor.execute("select c from student where YearofStudy=3")
+        rows=cursor.fetchall()
+        if len(rows)!=0:
+                
+            for row in rows:
+                r=list(row)           
+                l3.insert(j,r)
+                j=j+1
+            con.commit()
+        j=0
+        cursor.execute("select c from student where YearofStudy=2")
+        rows=cursor.fetchall()
+        if len(rows)!=0:
+                
+            for row in rows:
+                r=list(row)
+                l2.insert(j,r)
+                j=j+1
+            con.commit()
+        j=0
+        cursor.execute("select c from student where YearofStudy=1")
+        rows=cursor.fetchall()
+        if len(rows)!=0:
+                
+            for row in rows:
+                r=list(row)
+                l1.insert(j,r)
+                j=j+1
+        con.commit()
+        con.close() 
+        e4=[]
+        e3=[]
+        e2=[]
+        e1=[]
+
+        for i in l4:
+            for j in i:
+                e4.append(int(j))
+
+        for i in l3:
+            for j in i:
+                e3.append(int(j))
+
+        for i in l2:
+            for j in i:
+                e2.append(int(j))
+
+        for i in l1:
+            for j in i:
+                e1.append(int(j))
+
+
+        l=[]
+        e4t=len(e4)
+        e4n=0
+        for i in e4:
+            if(i>50):
+                e4n+=1
+        p4=(e4n/e4t)*100
+        y7.append(p4)
+        l.append(p4)
+
+        e3t=len(e3)
+        e3n=0
+        for i in e3:
+            if(i>50):
+                e3n+=1
+        p3=(e3n/e3t)*100
+        y8.append(p3)
+        l.append(p3)
+
+        e2t=len(e2)
+        e2n=0
+        for i in e2:
+            if(i>50):
+                e2n+=1
+        p2=(e2n/e2t)*100
+        y9.append(p2)
+        l.append(p2)
+
+        e1t=len(e1)
+        e1n=0
+        for i in e1:
+            if(i>50):
+                e1n+=1
+        p1=(e1n/e1t)*100
+        y20.append(p1)
+        l.append(p1)
+        #=======code-2=============
+        l4=[]
+        l3=[]
+        l2=[]
+        l1=[]
+        con=mysql.connect(host="localhost",user="root",password="nandhu118",database="project")
+        cursor=con.cursor()
+        cursor.execute("select python from student where YearofStudy=4")
+        rows=cursor.fetchall()
+        j=0
+        if len(rows)!=0:
+                
+            for row in rows:
+                r=list(row)
+                l4.insert(j,r)
+                j=j+1
+            con.commit()
+        j=0
+        cursor.execute("select python from student where YearofStudy=3")
+        rows=cursor.fetchall()
+        if len(rows)!=0:
+                
+            for row in rows:
+                r=list(row)           
+                l3.insert(j,r)
+                j=j+1
+            con.commit()
+        j=0
+        cursor.execute("select python from student where YearofStudy=2")
+        rows=cursor.fetchall()
+        if len(rows)!=0:
+                
+            for row in rows:
+                r=list(row)
+                l2.insert(j,r)
+                j=j+1
+            con.commit()
+        j=0
+        cursor.execute("select python from student where YearofStudy=1")
+        rows=cursor.fetchall()
+        if len(rows)!=0:
+                
+            for row in rows:
+                r=list(row)
+                l1.insert(j,r)
+                j=j+1
+        con.commit()
+        con.close() 
+        e4=[]
+        e3=[]
+        e2=[]
+        e1=[]
+
+        for i in l4:
+            for j in i:
+                e4.append(int(j))
+
+        for i in l3:
+            for j in i:
+                e3.append(int(j))
+
+        for i in l2:
+            for j in i:
+                e2.append(int(j))
+
+        for i in l1:
+            for j in i:
+                e1.append(int(j))
+
+
+        l=[]
+        e4t=len(e4)
+        e4n=0
+        for i in e4:
+            if(i>50):
+                e4n+=1
+        p4=(e4n/e4t)*100
+        y7.append(p4)
+        l.append(p4)
+
+        e3t=len(e3)
+        e3n=0
+        for i in e3:
+            if(i>50):
+                e3n+=1
+        p3=(e3n/e3t)*100
+        y8.append(p3)
+        l.append(p3)
+
+        e2t=len(e2)
+        e2n=0
+        for i in e2:
+            if(i>50):
+                e2n+=1
+        p2=(e2n/e2t)*100
+        y9.append(p2)
+        l.append(p2)
+
+        e1t=len(e1)
+        e1n=0
+        for i in e1:
+            if(i>50):
+                e1n+=1
+        p1=(e1n/e1t)*100
+        y20.append(p1)
+        l.append(p1)
+        #=============code-3=================
+        l4=[]
+        l3=[]
+        l2=[]
+        l1=[]
+        con=mysql.connect(host="localhost",user="root",password="nandhu118",database="project")
+        cursor=con.cursor()
+        cursor.execute("select java from student where YearofStudy=4")
+        rows=cursor.fetchall()
+        j=0
+        if len(rows)!=0:
+                
+            for row in rows:
+                r=list(row)
+                l4.insert(j,r)
+                j=j+1
+            con.commit()
+        j=0
+        cursor.execute("select java from student where YearofStudy=3")
+        rows=cursor.fetchall()
+        if len(rows)!=0:
+                
+            for row in rows:
+                r=list(row)           
+                l3.insert(j,r)
+                j=j+1
+            con.commit()
+        j=0
+        cursor.execute("select java from student where YearofStudy=2")
+        rows=cursor.fetchall()
+        if len(rows)!=0:
+                
+            for row in rows:
+                r=list(row)
+                l2.insert(j,r)
+                j=j+1
+            con.commit()
+        j=0
+        cursor.execute("select java from student where YearofStudy=1")
+        rows=cursor.fetchall()
+        if len(rows)!=0:
+                
+            for row in rows:
+                r=list(row)
+                l1.insert(j,r)
+                j=j+1
+        con.commit()
+        con.close() 
+        e4=[]
+        e3=[]
+        e2=[]
+        e1=[]
+
+        for i in l4:
+            for j in i:
+                e4.append(int(j))
+
+        for i in l3:
+            for j in i:
+                e3.append(int(j))
+
+        for i in l2:
+            for j in i:
+                e2.append(int(j))
+
+        for i in l1:
+            for j in i:
+                e1.append(int(j))
+
+
+        l=[]
+        e4t=len(e4)
+        e4n=0
+        for i in e4:
+            if(i>50):
+                e4n+=1
+        p4=(e4n/e4t)*100
+        y7.append(p4)
+        l.append(p4)
+
+        e3t=len(e3)
+        e3n=0
+        for i in e3:
+            if(i>50):
+                e3n+=1
+        p3=(e3n/e3t)*100
+        y8.append(p3)
+        l.append(p3)
+
+        e2t=len(e2)
+        e2n=0
+        for i in e2:
+            if(i>50):
+                e2n+=1
+        p2=(e2n/e2t)*100
+        y9.append(p2)
+        l.append(p2)
+
+        e1t=len(e1)
+        e1n=0
+        for i in e1:
+            if(i>50):
+                e1n+=1
+        p1=(e1n/e1t)*100
+        y20.append(p1)
+        l.append(p1)
+#==============code -1=============
+        l4=[]
+        l3=[]
+        l2=[]
+        l1=[]
+        con=mysql.connect(host="localhost",user="root",password="nandhu118",database="project")
+        cursor=con.cursor()
+        cursor.execute("select ds from student where YearofStudy=4")
+        rows=cursor.fetchall()
+        j=0
+        if len(rows)!=0:
+                
+            for row in rows:
+                r=list(row)
+                l4.insert(j,r)
+                j=j+1
+            con.commit()
+        j=0
+        cursor.execute("select ds from student where YearofStudy=3")
+        rows=cursor.fetchall()
+        if len(rows)!=0:
+                
+            for row in rows:
+                r=list(row)           
+                l3.insert(j,r)
+                j=j+1
+            con.commit()
+        j=0
+        cursor.execute("select ds from student where YearofStudy=2")
+        rows=cursor.fetchall()
+        if len(rows)!=0:
+                
+            for row in rows:
+                r=list(row)
+                l2.insert(j,r)
+                j=j+1
+            con.commit()
+        j=0
+        cursor.execute("select ds from student where YearofStudy=1")
+        rows=cursor.fetchall()
+        if len(rows)!=0:
+                
+            for row in rows:
+                r=list(row)
+                l1.insert(j,r)
+                j=j+1
+        con.commit()
+        con.close() 
+        e4=[]
+        e3=[]
+        e2=[]
+        e1=[]
+
+        for i in l4:
+            for j in i:
+                e4.append(int(j))
+
+        for i in l3:
+            for j in i:
+                e3.append(int(j))
+
+        for i in l2:
+            for j in i:
+                e2.append(int(j))
+
+        for i in l1:
+            for j in i:
+                e1.append(int(j))
+
+
+        l=[]
+        e4t=len(e4)
+        e4n=0
+        for i in e4:
+            if(i>50):
+                e4n+=1
+        p4=(e4n/e4t)*100
+        y7.append(p4)
+        l.append(p4)
+
+        e3t=len(e3)
+        e3n=0
+        for i in e3:
+            if(i>50):
+                e3n+=1
+        p3=(e3n/e3t)*100
+        y8.append(p3)
+        l.append(p3)
+
+        e2t=len(e2)
+        e2n=0
+        for i in e2:
+            if(i>50):
+                e2n+=1
+        p2=(e2n/e2t)*100
+        y9.append(p2)
+        l.append(p2)
+
+        e1t=len(e1)
+        e1n=0
+        for i in e1:
+            if(i>50):
+                e1n+=1
+        p1=(e1n/e1t)*100
+        y20.append(p1)
+
+        header=['c','python','java','ds']
+        colors=['r','g','b','c']
+
+
+        figure1=plt.Figure(figsize=(6,5),dpi=100)
+        ax1=figure1.add_subplot(111)
+        ax1.pie(y7,radius=1,labels=header,autopct='%0.2f%%',shadow=True)
+        p=FigureCanvasTkAgg(figure1,frame)
+        p.get_tk_widget().place(x=0,y=30,height=600,width=400)
+
+        ax1.set_title('Academic Year 2017-2021')
+
+        figure1=plt.Figure(figsize=(6,5),dpi=100)
+        ax1=figure1.add_subplot(111)
+        ax1.pie(y8,radius=1,labels=header,autopct='%0.2f%%',shadow=True)
+        p=FigureCanvasTkAgg(figure1,frame)
+        p.get_tk_widget().place(x=330,y=30,height=600,width=400)
+        ax1.set_title('Academic Year 2018-2022')
+
+        figure1=plt.Figure(figsize=(6,5),dpi=100)
+        ax1=figure1.add_subplot(111)
+        ax1.pie(y9,radius=1,labels=header,autopct='%0.2f%%',shadow=True)
+        p=FigureCanvasTkAgg(figure1,frame)
+        p.get_tk_widget().place(x=660,y=30,height=600,width=400)
+        ax1.set_title('Academic Year 2019-2023')
+
+        figure1=plt.Figure(figsize=(6,5),dpi=100)
+        ax1=figure1.add_subplot(111)
+        ax1.pie(y20,radius=1,labels=header,autopct='%0.2f%%',shadow=True)
+        p=FigureCanvasTkAgg(figure1,frame)
+        p.get_tk_widget().place(x=1000,y=30,height=600,width=400)
+        ax1.set_title('Academic Year 2020-2024')
+
+        row.mainloop()
+
+    def helpfunction():
+        pass
+    #=========result dashboard window=========
+    rlw=Toplevel()
+    rlw.title('Result DashBoard')
+    rlw.geometry("1500x850")
+    #============home background=======
+    my_pic=Image.open("C:\\Users\\admin\\Desktop\\images\\mbg1.jpg")
+    resized=my_pic.resize((1500,850),Image.ANTIALIAS)
+    new_pic=ImageTk.PhotoImage(resized)
+    my_label=Label(rlw,image=new_pic)
+    my_label.pack(padx=0,pady=0)
+    #=========title==============
+    title=Label(rlw,text="Result DashBoard",font=("times new roman",40,"italic"),bg="#0b5377",fg="white")
+    title.place(x=0,y=0,relwidth=1)
+    #=========exit===============
+    exitbutton=Button(title,text="Exit",bd=5,width=15,command=rlw.destroy).pack(side='right',padx=20,pady=20)
+    #=========frames===============
+    login_frame1=Frame(rlw,bg="#883241")
+    login_frame1.place(x=240,y=100,width=320,height=250)
+
+    login_frame2=Frame(rlw,bg="#883241")
+    login_frame2.place(x=750,y=100,width=320,height=250)
+
+    login_frame3=Frame(rlw,bg="#883241")
+    login_frame3.place(x=240,y=410,width=320,height=250)
+
+    login_frame4=Frame(rlw,bg="#883241")
+    login_frame4.place(x=750,y=410,width=320,height=250)
+    #===========images=============
+    sub_icon=ImageTk.PhotoImage(file="C:\\Users\\admin\\Desktop\\images\\sub2.jpg")
+    sub_lbl=Label(login_frame1,image=sub_icon,width=290,height=190)
+    sub_lbl.place(x=12,y=5)
+    
+    stu_icon=ImageTk.PhotoImage(file="C:\\Users\\admin\\Desktop\\images\\s2.jpg")
+    stu_lbl=Label(login_frame2,image=stu_icon,width=290,height=190)
+    stu_lbl.place(x=12,y=5)
+
+    overall_icon=ImageTk.PhotoImage(file="C:\\Users\\admin\\Desktop\\images\\oe2.jpg")
+    overall_lbl=Label(login_frame3,image=overall_icon,width=290,height=190)
+    overall_lbl.place(x=12,y=5)
+
+    help_icon=ImageTk.PhotoImage(file="C:\\Users\\admin\\Desktop\\images\\help.jpg")
+    help_lbl=Label(login_frame4,image=help_icon,width=290,height=190)
+    help_lbl.place(x=12,y=5)
+#========buttons===========
+    but_sub=Button(login_frame1,text="Subject",font=("Times",16,"bold"),bg="#e43b06",fg="white",command=subjectfunction)
+    but_sub.place(x=110,y=205)
+
+    but_stu=Button(login_frame2,text="Student",font=("Times",16,"bold"),bg="#e43b06",fg="white",command=studentresultfunction)
+    but_stu.place(x=110,y=205)
+
+    but_overall=Button(login_frame3,text="Overall Estimation",font=("Times",16,"bold"),bg="#e43b06",fg="white",command=estimation)
+    but_overall.place(x=60,y=205)
+
+    but_help=Button(login_frame4,text="Help",font=("Times",16,"bold"),bg="#e43b06",fg="white",command=helpfunction)
+    but_help.place(x=130,y=205)
+
+    rlw.mainloop()
+
+title=Label(root,text="Student Performance Analysis",font=("times new roman",40,"italic"),bg="#192045",fg="#ffff12")
+title.place(x=0,y=0,relwidth=1)
+
+exitbutton=Button(title,text="Exit",width=15,bd=5,command=root.destroy).pack(side='right',padx=20,pady=20)
+
+
+home_frame=Frame(root,bg="Tomato")
+home_frame.place(x=500,y=150)
+
+logoadmin=Label(home_frame,image=admin_icon)
+logoadmin.grid(row=0,column=0,padx=20,pady=20)
+but_admin=Button(home_frame,text="Admin",font=("Times",35,"bold"),bg="#45ff73",fg="#7211ff",command=adminloginfunction)
+but_admin.grid(row=0,column=1)
+
+logostudent=Label(home_frame,image=student_icon)
+logostudent.grid(row=1,column=0,padx=20,pady=20)
+but_student=Button(home_frame,text="Student",font=("Times",35,"bold"),bg="#45ff73",fg="#7211ff",command=studentloginfunction)
+but_student.grid(row=1,column=1)
+
+logoresult=Label(home_frame,image=result_icon)
+logoresult.grid(row=2,column=0,padx=20,pady=20)
+but_result=Button(home_frame,text="Result",font=("Times",35,"bold"),bg="#45ff73",fg="#7211ff",command=resultfunction)
+but_result.grid(row=2,column=1)
+
+root.mainloop()
