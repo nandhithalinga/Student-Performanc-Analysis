@@ -8,7 +8,7 @@ academic years.
 * It can be used by educational institutes or colleges to maintain the records of students and pass percentage of subject easily. This application will greatly simplify and speed up the result preparation and management process.
 ## Output Screens
 <hr>
-### Home Page<br>
+<h3> Home Page</h3><br>
 Home page consists of 3 different buttons namely Admin, Student, Result and an Exit button. 
 
 
