@@ -58,7 +58,9 @@ Overall Estimation window consists of pie charts indicating the passpercentage o
 <hr>
 <h3>Help</h3>
 Help window consists of some questions and answers related to users doubt clarification.<br>
-![help](https://user-images.githubusercontent.com/87567863/169854881-83b90f69-d359-4ada-b0d6-267f27eef722.jpg)
+![help](https://user-images.githubusercontent.com/87567863/169854881-83b90f69-d359-4ada-b0d6-267f27eef722.jpg)<br>
+<h2>Conclusion</h2>
+The project clearly depicts that the Student Performace Analysis is very efficient. It shows how the concept of database like MySql  can be used  to store data efficiently. The Student Performance Analysis may be chosen because it is thought to provide following advantages such as :This software is space and time efficient,  It is small and user friendly, Attractive design. 
 
 
 
