@@ -7,4 +7,10 @@ academic years.
 * So all the information about an student will be available in a few seconds. All information can be stored and different operations can be performed on it through database. Some of the activities performed are submitting form by student, updating, searching and deleting records of students by admin etc.
 * It can be used by educational institutes or colleges to maintain the records of students and pass percentage of subject easily. This application will greatly simplify and speed up the result preparation and management process.
 ## Output Screens
+<hr>
+### Home Page
+Home page consists of 3 different buttons namely Admin, Student, Result and an Exit button. 
+![image](https://user-images.githubusercontent.com/87567863/169818829-00534780-ee71-406a-9c80-d29fef0e4cb3.png)
+
+
 
