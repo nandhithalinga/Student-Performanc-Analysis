@@ -15,15 +15,15 @@ Home page consists of 3 different buttons namely Admin, Student, Result and an E
 <h3>Admin Login Page</h3>
 Admin login page consists of username and password. Inorder to enter to admin dashboard,  admin should give his respective password and username.<br>
 ![admin login](https://user-images.githubusercontent.com/87567863/169849945-d6eeed86-d189-4bd7-850b-9f00f4ee3a09.jpg)
-If incase of any mistype in username and password a message box appears indicating that to enter valid username and password.
+If incase of any mistype in username and password a message box appears indicating that to enter valid username and password.<br>
 ![admin login2](https://user-images.githubusercontent.com/87567863/169850228-732bcb90-e275-4668-8379-a962d3183e94.jpg)
 <hr>
 <h3>Admin DashBoard</h3>
-After entering valid username and password an admin window appears which contains all student records and options like update delete and search.
+After entering valid username and password an admin window appears which contains all student records and options like update delete and search.<br>
 ![admin dash](https://user-images.githubusercontent.com/87567863/169850583-083fb62b-0e7c-4a39-ad94-24c425f33ec8.jpg)
 <hr>
 <h3>Student Login Page</h3>
-Student login page consists of username and password. Inorder to enter to student dashboard,  student should give his/her respective username and password.
+Student login page consists of username and password. Inorder to enter to student dashboard,  student should give his/her respective username and password.<br>
 ![student login](https://user-images.githubusercontent.com/87567863/169850852-4291f0db-56f9-451a-84b8-efe9664679d6.jpg)<br>
 If incase of any mistype in username and password a message box appears indicating that to enter valid username and password.<br>
 ![student login2](https://user-images.githubusercontent.com/87567863/169850887-e3dbf2c4-b208-4b4f-99d0-f2848335b6cd.jpg)
