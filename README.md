@@ -11,6 +11,44 @@ academic years.
 <h3> Home Page</h3>
 Home page consists of 3 different buttons namely Admin, Student, Result and an Exit button. <br>
 ![home](https://user-images.githubusercontent.com/87567863/169824840-b13ab28c-16e1-45da-8475-0fa29d7be666.jpg)
+<hr>
+<h3>Admin Login Page</h3>
+Admin login page consists of username and password. Inorder to enter to admin dashboard,  admin should give his respective password and username.
+If incase of any mistype in username and password a message box appears indicating that to enter valid username and password.
+<hr>
+<h3>Admin DashBoard</h3>
+After entering valid username and password an admin window appears which contains all student records and options like update delete and search.
+<hr>
+<h3>Student Login Page</h3>
+Student login page consists of username and password. Inorder to enter to student dashboard,  student should give his/her respective username and password.
+If incase of any mistype in username and password a message box appears indicating that to enter valid username and password.
+<hr>
+<h3>Student DashBoard</h3>
+After entering valid username and password an student window appears which contains a form which the student have to fill and submit.
+<hr>
+<h3>Result DashBoard</h3>
+Result dashboard consists of four buttons namely student,subject, overall estimation.
+<hr>
+<h3>Student Result DashBoard</h3>
+Student Result DashBoard gives result of a particular student ,entered to search, in the form of graphs along with his data.
+<hr>
+<h3>Subject DashBoard</h3>
+In subject dashboard there will be buttons of all available subjects which on clicking gives pass percentage of students in all available academic years.Here in this project the various subjects available are Python, Java, C, DataStrucutres.
+<h4>C –Language</h4>
+<h4>Python</h4>
+<h4>Java Language</h4>
+<h4>Data Structures</h4>
+<hr>
+<h3>Overall Estimation</h3>
+Overall Estimation window consists of pie charts indicating the passpercentage of subjects in all available academic years. 
+<hr>
+<h3>Help</h3>
+Help window consists of some questions and answers related to users doubt clarification. 
+
+
+
+
+
 
 
 
