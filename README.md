@@ -13,7 +13,7 @@ Home page consists of 3 different buttons namely Admin, Student, Result and an E
 ![home](https://user-images.githubusercontent.com/87567863/169824840-b13ab28c-16e1-45da-8475-0fa29d7be666.jpg)
 <hr>
 <h3>Admin Login Page</h3>
-Admin login page consists of username and password. Inorder to enter to admin dashboard,  admin should give his respective password and username.
+Admin login page consists of username and password. Inorder to enter to admin dashboard,  admin should give his respective password and username.<br>
 ![admin login](https://user-images.githubusercontent.com/87567863/169849945-d6eeed86-d189-4bd7-850b-9f00f4ee3a09.jpg)
 If incase of any mistype in username and password a message box appears indicating that to enter valid username and password.
 ![admin login2](https://user-images.githubusercontent.com/87567863/169850228-732bcb90-e275-4668-8379-a962d3183e94.jpg)
@@ -24,24 +24,24 @@ After entering valid username and password an admin window appears which contain
 <hr>
 <h3>Student Login Page</h3>
 Student login page consists of username and password. Inorder to enter to student dashboard,  student should give his/her respective username and password.
-![student login](https://user-images.githubusercontent.com/87567863/169850852-4291f0db-56f9-451a-84b8-efe9664679d6.jpg)
-If incase of any mistype in username and password a message box appears indicating that to enter valid username and password.
+![student login](https://user-images.githubusercontent.com/87567863/169850852-4291f0db-56f9-451a-84b8-efe9664679d6.jpg)<br>
+If incase of any mistype in username and password a message box appears indicating that to enter valid username and password.<br>
 ![student login2](https://user-images.githubusercontent.com/87567863/169850887-e3dbf2c4-b208-4b4f-99d0-f2848335b6cd.jpg)
 <hr>
 <h3>Student DashBoard</h3>
-After entering valid username and password an student window appears which contains a form which the student have to fill and submit.
+After entering valid username and password an student window appears which contains a form which the student have to fill and submit.<br>
 ![image](https://user-images.githubusercontent.com/87567863/169855116-c9d97616-f280-4d45-a0dc-13ba4fc9dbb1.png)
 <hr>
 <h3>Result DashBoard</h3>
-Result dashboard consists of four buttons namely student,subject, overall estimation.
+Result dashboard consists of four buttons namely student,subject, overall estimation.<br>
 ![result dash](https://user-images.githubusercontent.com/87567863/169854425-824f8524-b7d4-41c6-be9e-8737e3339e8b.jpg)
 <hr>
 <h3>Student Result DashBoard</h3>
-Student Result DashBoard gives result of a particular student ,entered to search, in the form of graphs along with his data.
+Student Result DashBoard gives result of a particular student ,entered to search, in the form of graphs along with his data.<br>
 ![student result](https://user-images.githubusercontent.com/87567863/169854604-603a320d-8abc-4093-98e9-8848b76c9e63.jpg)
 <hr>
 <h3>Subject DashBoard</h3>
-In subject dashboard there will be buttons of all available subjects which on clicking gives pass percentage of students in all available academic years.Here in this project the various subjects available are Python, Java, C, DataStrucutres.
+In subject dashboard there will be buttons of all available subjects which on clicking gives pass percentage of students in all available academic years.Here in this project the various subjects available are Python, Java, C, DataStrucutres.<br>
 ![subject dash](https://user-images.githubusercontent.com/87567863/169854661-56ba4a3e-9447-4767-8fa3-e204beeb0d7a.jpg)
 <h4>C –Language</h4>
 ![c](https://user-images.githubusercontent.com/87567863/169854688-6d109a21-d75d-4a5f-b8b3-0798fa9c00ad.jpg)
@@ -53,11 +53,11 @@ In subject dashboard there will be buttons of all available subjects which on cl
 ![ds](https://user-images.githubusercontent.com/87567863/169854789-d36c95ff-7e51-4b0a-a002-95f20a924d0d.jpg)
 <hr>
 <h3>Overall Estimation</h3>
-Overall Estimation window consists of pie charts indicating the passpercentage of subjects in all available academic years. 
+Overall Estimation window consists of pie charts indicating the passpercentage of subjects in all available academic years. <br>
 ![overall](https://user-images.githubusercontent.com/87567863/169854817-c4391b21-414f-4e74-933c-d9bf99a4759f.jpg)
 <hr>
 <h3>Help</h3>
-Help window consists of some questions and answers related to users doubt clarification.
+Help window consists of some questions and answers related to users doubt clarification.<br>
 ![help](https://user-images.githubusercontent.com/87567863/169854881-83b90f69-d359-4ada-b0d6-267f27eef722.jpg)
 
 
