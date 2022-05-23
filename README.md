@@ -14,10 +14,13 @@ Home page consists of 3 different buttons namely Admin, Student, Result and an E
 <hr>
 <h3>Admin Login Page</h3>
 Admin login page consists of username and password. Inorder to enter to admin dashboard,  admin should give his respective password and username.
+![admin login](https://user-images.githubusercontent.com/87567863/169849945-d6eeed86-d189-4bd7-850b-9f00f4ee3a09.jpg)
 If incase of any mistype in username and password a message box appears indicating that to enter valid username and password.
+![admin login2](https://user-images.githubusercontent.com/87567863/169850228-732bcb90-e275-4668-8379-a962d3183e94.jpg)
 <hr>
 <h3>Admin DashBoard</h3>
 After entering valid username and password an admin window appears which contains all student records and options like update delete and search.
+
 <hr>
 <h3>Student Login Page</h3>
 Student login page consists of username and password. Inorder to enter to student dashboard,  student should give his/her respective username and password.
