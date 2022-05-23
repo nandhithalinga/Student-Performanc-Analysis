@@ -10,7 +10,7 @@ academic years.
 <hr>
 <h3> Home Page</h3>
 Home page consists of 3 different buttons namely Admin, Student, Result and an Exit button. 
-![home](C:\Users\Sagar\Desktop\home.jpg)
+![](images/C:\Users\Sagar\Desktop\home.jpg)
 
 
 
