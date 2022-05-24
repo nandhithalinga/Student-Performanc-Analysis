@@ -30,7 +30,7 @@ If incase of any mistype in username and password a message box appears indicati
 <hr>
 <h3>Student DashBoard</h3>
 After entering valid username and password an student window appears which contains a form which the student have to fill and submit.<br>
-<img src="https://user-images.githubusercontent.com/87567863/169855116-c9d97616-f280-4d45-a0dc-13ba4fc9dbb1.png">
+<img src="https://user-images.githubusercontent.com/87567863/170020771-5631ff45-66ae-4de4-8299-28bbe6a3db0b.jpg">
 <hr>
 <h3>Result DashBoard</h3>
 Result dashboard consists of four buttons namely student,subject, overall estimation.<br>
@@ -60,11 +60,7 @@ Overall Estimation window consists of pie charts indicating the passpercentage o
 Help window consists of some questions and answers related to users doubt clarification.<br>
 <img src="https://user-images.githubusercontent.com/87567863/169854881-83b90f69-d359-4ada-b0d6-267f27eef722.jpg">
 <h2>Conclusion</h2>
-The project clearly depicts that the Student Performace Analysis is very efficient. It shows how the concept of database like MySql  can be used  to store data efficiently. The Student Performance Analysis may be chosen because it is thought to provide following advantages such as :This software is space and time efficient,  It is small and user friendly, Attractive design. 
-
-
-
-
+The project clearly depicts that the Student Performace Analysis is very efficient. It shows how the concept of database like MySql  can be used  to store data efficiently. The Student Performance Analysis may be chosen because it is thought to provide following advantages such as :This software is space and time efficient,  It is small and user friendly, Attractive design.
 
 
 
