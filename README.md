@@ -13,6 +13,7 @@ Home page consists of 3 different buttons namely Admin, Student, Result and an E
 ![home](https://user-images.githubusercontent.com/87567863/169824840-b13ab28c-16e1-45da-8475-0fa29d7be666.jpg)
 <hr>
 <h3>Admin Login Page</h3>
+<img src="https://user-images.githubusercontent.com/87567863/169849945-d6eeed86-d189-4bd7-850b-9f00f4ee3a09.jpg">
 Admin login page consists of username and password. Inorder to enter to admin dashboard,  admin should give his respective password and username.<br>
 ![admin login](https://user-images.githubusercontent.com/87567863/169849945-d6eeed86-d189-4bd7-850b-9f00f4ee3a09.jpg)
 If incase of any mistype in username and password a message box appears indicating that to enter valid username and password.<br>
